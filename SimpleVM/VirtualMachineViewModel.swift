@@ -75,7 +75,9 @@ class VirtualMachineViewModel: NSObject, ObservableObject, VZVirtualMachineDeleg
         
         let bootloader = VZLinuxBootLoader(kernelURL: kernelURL)
         bootloader.initialRamdiskURL = initialRamdiskURL
-        bootloader.commandLine = "console=hvc0"
+        // https://forums.macrumors.com/threads/ubuntu-linux-virtualized-on-m1-success.2270365/post-29309703
+        // for ubuntu cloud
+        bootloader.commandLine = "console=hvc0 root=/dev/vda"
         
         let serial = VZVirtioConsoleDeviceSerialPortConfiguration()
         
@@ -93,7 +95,7 @@ class VirtualMachineViewModel: NSObject, ObservableObject, VZVirtualMachineDeleg
         do {
             blockAttachment = try VZDiskImageStorageDeviceAttachment(
                 url: bootableImageURL,
-                readOnly: true
+                readOnly: false
             )
         } catch {
             NSLog("Failed to load bootableImage: \(error)")
